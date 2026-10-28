@@ -17,15 +17,31 @@ public class CloudflareWorkerService {
     private final String workerToken;
 
     public CloudflareWorkerService(RestClient restClient,
-                                   @Value("${app.worker.url}") String workerUrl,
-                                   @Value("${app.worker.token}") String workerToken) {
+                                   @Value("${cloudflare.worker.url:}") String cloudflareWorkerUrl,
+                                   @Value("${app.worker.url:}") String appWorkerUrl,
+                                   @Value("${WORKER_AUTH_TOKEN:}") String envWorkerToken,
+                                   @Value("${app.worker.token:}") String appWorkerToken) {
         this.restClient = restClient;
-        this.workerUrl = workerUrl;
-        this.workerToken = workerToken;
+        String resolvedUrl = cloudflareWorkerUrl != null && !cloudflareWorkerUrl.isBlank() ? cloudflareWorkerUrl : appWorkerUrl;
+        if (resolvedUrl == null || resolvedUrl.isBlank()) {
+            resolvedUrl = System.getenv("CLOUDFLARE_WORKER_URL");
+        }
+        if (resolvedUrl == null || resolvedUrl.isBlank()) {
+            System.err.println("AVISO: CLOUDFLARE_WORKER_URL no está configurada");
+        }
+        this.workerUrl = resolvedUrl;
+        String resolvedToken = envWorkerToken != null && !envWorkerToken.isBlank() ? envWorkerToken : appWorkerToken;
+        if (resolvedToken == null || resolvedToken.isBlank()) {
+            resolvedToken = System.getenv("WORKER_AUTH_TOKEN");
+        }
+        this.workerToken = resolvedToken;
     }
 
     public void enviarCorreo(CorreoRequest request) {
         try {
+            if (workerUrl == null || workerUrl.isBlank()) {
+                throw new IllegalStateException("CLOUDFLARE_WORKER_URL no está configurada");
+            }
             restClient.post()
                     .uri(workerUrl)
                     .header("X-Worker-Token", workerToken)

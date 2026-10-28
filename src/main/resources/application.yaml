@@ -11,3 +11,7 @@ app:
   worker:
     url: ${CLOUDFLARE_WORKER_URL:}
     token: ${WORKER_AUTH_TOKEN:}
+
+cloudflare:
+  worker:
+    url: ${CLOUDFLARE_WORKER_URL:}
