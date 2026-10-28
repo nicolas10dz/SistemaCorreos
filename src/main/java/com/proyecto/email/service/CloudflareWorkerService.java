@@ -9,6 +9,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
 
+import jakarta.annotation.PostConstruct;
+
 @Service
 public class CloudflareWorkerService {
 
@@ -35,6 +37,11 @@ public class CloudflareWorkerService {
             resolvedToken = System.getenv("WORKER_AUTH_TOKEN");
         }
         this.workerToken = resolvedToken;
+    }
+
+    @PostConstruct
+    public void init() {
+        System.out.println("VALOR RECIBIDO DE CLOUDFLARE_URL: " + workerUrl);
     }
 
     public void enviarCorreo(CorreoRequest request) {
