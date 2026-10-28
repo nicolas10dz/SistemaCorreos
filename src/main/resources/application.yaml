@@ -7,7 +7,7 @@ server:
 
 app:
   cors:
-    allowed-origins: ${FRONTEND_ORIGIN:http://localhost:4200}
+    allowed-origins: "${FRONTEND_ORIGIN:http://localhost:4200,https://sistemacorreos-3.onrender.com}"
   worker:
     token: ${WORKER_AUTH_TOKEN:}
 
