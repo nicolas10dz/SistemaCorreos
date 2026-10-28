@@ -24,13 +24,6 @@ public class CloudflareWorkerService {
         this.workerToken = workerToken;
     }
 
-    }
-
-    @PostConstruct
-    public void init() {
-        System.out.println("VALOR RECIBIDO DE CLOUDFLARE_URL: " + workerUrl);
-    }
-
     public void enviarCorreo(CorreoRequest request) {
         try {
             if (workerUrl == null || workerUrl.isBlank()) {
