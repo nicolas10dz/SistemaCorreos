@@ -35,7 +35,7 @@ class CloudflareWorkerServiceTest {
 
     @BeforeEach
     void setUp() {
-        cloudflareWorkerService = new CloudflareWorkerService(restClient, "http://localhost:8787", "token-test");
+        cloudflareWorkerService = new CloudflareWorkerService(restClient, "http://localhost:8787", "token-test", null, null);
     }
 
     @Test
