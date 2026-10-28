@@ -9,7 +9,6 @@ app:
   cors:
     allowed-origins: ${FRONTEND_ORIGIN:http://localhost:4200}
   worker:
-    url: https://snowy-cell-0ab3.nicolas10dz.workers.dev
     token: ${WORKER_AUTH_TOKEN:}
 
 cloudflare:

@@ -9,24 +9,21 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
 
-import jakarta.annotation.PostConstruct;
-
 @Service
 public class CloudflareWorkerService {
 
     private final RestClient restClient;
     private final String workerUrl;
-    private String workerToken;
+    private final String workerToken;
 
     public CloudflareWorkerService(RestClient restClient,
-                                   @Value("${cloudflare.worker.url}") String cloudflareWorkerUrl,
-                                   @Value("${app.worker.token:}") String workerToken) {
+                                   @Value("${cloudflare.worker.url}") String workerUrl,
+                                   @Value("${WORKER_AUTH_TOKEN:}") String workerToken) {
         this.restClient = restClient;
-        this.workerUrl = cloudflareWorkerUrl;
+        this.workerUrl = workerUrl;
         this.workerToken = workerToken;
-        if (this.workerToken == null || this.workerToken.isBlank()) {
-            this.workerToken = System.getenv("WORKER_AUTH_TOKEN");
-        }
+    }
+
     }
 
     @PostConstruct
