@@ -16,27 +16,17 @@ public class CloudflareWorkerService {
 
     private final RestClient restClient;
     private final String workerUrl;
-    private final String workerToken;
+    private String workerToken;
 
     public CloudflareWorkerService(RestClient restClient,
-                                   @Value("${cloudflare.worker.url:}") String cloudflareWorkerUrl,
-                                   @Value("${app.worker.url:}") String appWorkerUrl,
-                                   @Value("${WORKER_AUTH_TOKEN:}") String envWorkerToken,
-                                   @Value("${app.worker.token:}") String appWorkerToken) {
+                                   @Value("${cloudflare.worker.url}") String cloudflareWorkerUrl,
+                                   @Value("${app.worker.token:}") String workerToken) {
         this.restClient = restClient;
-        String resolvedUrl = cloudflareWorkerUrl != null && !cloudflareWorkerUrl.isBlank() ? cloudflareWorkerUrl : appWorkerUrl;
-        if (resolvedUrl == null || resolvedUrl.isBlank()) {
-            resolvedUrl = System.getenv("CLOUDFLARE_WORKER_URL");
+        this.workerUrl = cloudflareWorkerUrl;
+        this.workerToken = workerToken;
+        if (this.workerToken == null || this.workerToken.isBlank()) {
+            this.workerToken = System.getenv("WORKER_AUTH_TOKEN");
         }
-        if (resolvedUrl == null || resolvedUrl.isBlank()) {
-            System.err.println("AVISO: CLOUDFLARE_WORKER_URL no está configurada");
-        }
-        this.workerUrl = resolvedUrl;
-        String resolvedToken = envWorkerToken != null && !envWorkerToken.isBlank() ? envWorkerToken : appWorkerToken;
-        if (resolvedToken == null || resolvedToken.isBlank()) {
-            resolvedToken = System.getenv("WORKER_AUTH_TOKEN");
-        }
-        this.workerToken = resolvedToken;
     }
 
     @PostConstruct
