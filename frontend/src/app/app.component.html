@@ -1,0 +1,73 @@
+<div class="container">
+  <header class="header">
+    <h1>{{ title }}</h1>
+    <p class="subtitle">Envío de correos electrónicos</p>
+  </header>
+
+  <main class="main-content">
+    <form [formGroup]="correoForm" (ngSubmit)="enviarCorreo()" novalidate>
+      <div class="form-group">
+        <label for="destinatario">Destinatario</label>
+        <input 
+          type="email" 
+          id="destinatario" 
+          formControlName="destinatario" 
+          class="form-control"
+          [class.invalid]="f['destinatario'].invalid && f['destinatario'].touched"
+          placeholder="correo@ejemplo.com"
+        >
+        <div class="error-message" *ngIf="f['destinatario'].invalid && f['destinatario'].touched">
+          <span *ngIf="f['destinatario'].errors?.['required']">El destinatario es obligatorio</span>
+          <span *ngIf="f['destinatario'].errors?.['email']">Ingrese un correo electrónico válido</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="asunto">Asunto</label>
+        <input 
+          type="text" 
+          id="asunto" 
+          formControlName="asunto" 
+          class="form-control"
+          [class.invalid]="f['asunto'].invalid && f['asunto'].touched"
+          placeholder="Asunto del correo"
+        >
+        <div class="error-message" *ngIf="f['asunto'].invalid && f['asunto'].touched">
+          <span *ngIf="f['asunto'].errors?.['required']">El asunto es obligatorio</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="mensaje">Mensaje</label>
+        <textarea 
+          id="mensaje" 
+          formControlName="mensaje" 
+          class="form-control textarea"
+          [class.invalid]="f['mensaje'].invalid && f['mensaje'].touched"
+          placeholder="Escriba su mensaje aquí..."
+          rows="6"
+        ></textarea>
+        <div class="error-message" *ngIf="f['mensaje'].invalid && f['mensaje'].touched">
+          <span *ngIf="f['mensaje'].errors?.['required']">El mensaje es obligatorio</span>
+        </div>
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn-submit"
+        [disabled]="enviando"
+      >
+        <span *ngIf="!enviando">Enviar correo</span>
+        <span *ngIf="enviando">Enviando...</span>
+      </button>
+    </form>
+
+    <div class="alert alert-success" *ngIf="mensajeExito">
+      {{ mensajeExito }}
+    </div>
+
+    <div class="alert alert-error" *ngIf="mensajeError">
+      {{ mensajeError }}
+    </div>
+  </main>
+</div>
